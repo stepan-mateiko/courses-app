@@ -1,0 +1,22 @@
+@import "../../../../styles/variables";
+@import "../../../../styles/mixins";
+
+.card {
+  @include centerize(78%);
+  @include flex-type();
+  background-color: #fff;
+  box-shadow: 2px 0px 8px 0px #00000040;
+  padding: 1%;
+  border-left: 7px solid $card-border-color;
+  &-text {
+    width: 60%;
+    h3 {
+      font-weight: 700;
+      font-size: 1.25rem;
+      line-height: 1.6rem;
+    }
+  }
+  &-info {
+    width: 30%;
+  }
+}
