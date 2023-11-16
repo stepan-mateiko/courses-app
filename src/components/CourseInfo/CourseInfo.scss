@@ -1,0 +1,28 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.course-info {
+  @include centerize(78%);
+  position: relative;
+  padding: 1%;
+
+  &__wrapper {
+    @include flex-type();
+    width: 100%;
+    background-color: #fff;
+    padding: 5%;
+    div {
+      width: 45%;
+    }
+  }
+  button {
+    position: absolute;
+    right: 0;
+    margin-top: 5%;
+  }
+
+  &__description {
+  }
+  &__data {
+  }
+}
