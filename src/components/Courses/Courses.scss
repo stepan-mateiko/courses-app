@@ -1,0 +1,11 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.courses {
+  @include centerize(90%);
+  @include flex-type();
+  flex-direction: column;
+  gap: 20px;
+  padding: 10% 5%;
+  background-color: $courses-background;
+}

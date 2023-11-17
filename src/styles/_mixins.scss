@@ -1,0 +1,10 @@
+@mixin flex-type() {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin centerize($width: 100%) {
+  width: $width;
+  margin: 0 auto;
+}

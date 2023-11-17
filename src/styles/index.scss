@@ -1,0 +1,11 @@
+@import "./normalize";
+@import "./variables";
+@import "./body";
+@import "./mixins";
+
+@import "../components/Header/Header.scss";
+@import "../components/Courses/Courses.scss";
+@import "../components/Courses/components/CourseCard/CourseCard.scss";
+@import "../common/Button/Button.scss";
+@import "../components/CourseInfo/CourseInfo.scss";
+@import "../components/EmptyCourseList/EmptyCourseList.scss";
