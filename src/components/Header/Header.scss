@@ -4,6 +4,7 @@
 .header {
   @include flex-type;
   @include centerize(90%);
+  background-color: #fff;
   padding: 1%;
   &__btn {
     @include flex-type;
