@@ -1,26 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-import Button from "../../common/Button/Button.tsx";
+import { mockedCoursesList } from "../../constants.ts";
+import { getDuration } from "../../helpers/getCourseDuration.ts";
+import { getAuthor } from "../../helpers/getAuthors.ts";
+import CourseLink from "../../common/Link/Link.tsx";
 
-export interface CourseInfoProps {
+interface Course {
   id: string;
   title: string;
   description: string;
-  courseDate: string;
-  courseDuration: string;
-  courseAuthors: string;
-  onBack: () => void;
+  creationDate: string;
+  duration: number;
+  authors: string[];
 }
 
-const CourseInfo: React.FC<CourseInfoProps> = ({
-  id,
-  title,
-  description,
-  courseDate,
-  courseDuration,
-  courseAuthors,
-  onBack,
-}) => {
+const CourseInfo: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const localStorageData = JSON.parse(localStorage.getItem("courses") || "[]");
+  const [list, setList] = useState<Course[]>(mockedCoursesList);
+
+  useEffect(() => {
+    const uniqueCourses = new Set([...mockedCoursesList, ...localStorageData]);
+    setList([...uniqueCourses]);
+  }, []);
+
+  const course: Course | undefined = list.find((item) => item.id === id);
+  if (!course) {
+    return <p>Course not found</p>;
+  }
+
+  const { title, description, creationDate, duration, authors } = course;
+  const courseDate: string = creationDate.split("/").join(".");
+  const courseDuration: string = getDuration(duration);
+  const courseAuthors = authors.map((item) => getAuthor(item)).join("   ");
+
   return (
     <div className="course-info">
       <h3>{title}</h3>
@@ -44,7 +58,7 @@ const CourseInfo: React.FC<CourseInfoProps> = ({
           </p>
         </div>
       </div>
-      <Button buttonText="Back" onClick={onBack} />
+      <CourseLink linkPath="/courses" linkText="back" />
     </div>
   );
 };

@@ -3,11 +3,11 @@ import React, { ChangeEvent } from "react";
 interface InputProps {
   type: string;
   label: string;
-  value: string;
+  value: string | number;
   onChange: (value: string) => void;
   placeholder?: string;
-  pattern: string;
-  title: string;
+  pattern?: string;
+  title?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -19,13 +19,21 @@ const Input: React.FC<InputProps> = ({
   pattern,
   title,
 }) => {
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     onChange(event.target.value);
   };
 
-  return (
-    <div className="input-block">
-      <label>{label}</label>
+  const inputElement =
+    type === "textarea" ? (
+      <textarea
+        value={value}
+        onChange={handleChange}
+        placeholder={placeholder}
+        required
+      />
+    ) : (
       <input
         type={type}
         value={value}
@@ -35,6 +43,12 @@ const Input: React.FC<InputProps> = ({
         title={title}
         required
       />
+    );
+
+  return (
+    <div className="input-block">
+      <label>{label}</label>
+      {inputElement}
       <div className="error-message" id="name-error"></div>
     </div>
   );

@@ -38,7 +38,10 @@ const Login: React.FC = () => {
       );
 
       const token = response.data.result.slice(7);
+      const userName = response.data.user.name;
       localStorage.setItem("token", token);
+      localStorage.setItem("userName", userName);
+      navigate("/courses");
     } catch (error) {
       console.error("Error:", error.message);
     }
@@ -47,7 +50,6 @@ const Login: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     handlePostRequest();
-    navigate("/login");
   };
 
   return (

@@ -1,9 +1,8 @@
 import React from "react";
 
-import Button from "../../../../common/Button/Button.tsx";
-import { CourseInfoProps } from "../../../CourseInfo/CourseInfo.tsx";
 import { getDuration } from "../../../../helpers/getCourseDuration.ts";
 import { getAuthor } from "../../../../helpers/getAuthors.ts";
+import CourseLink from "../../../../common/Link/Link.tsx";
 
 interface CourseCardProps {
   id: string;
@@ -12,7 +11,6 @@ interface CourseCardProps {
   creationDate: string;
   duration: number;
   authors: string[];
-  onShowCourse: (courseProps: CourseInfoProps) => void;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({
@@ -22,21 +20,10 @@ const CourseCard: React.FC<CourseCardProps> = ({
   creationDate,
   duration,
   authors,
-  onShowCourse,
 }) => {
   const courseDate: string = creationDate.split("/").join(".");
   const courseDuration: string = getDuration(duration);
   const courseAuthors = authors.map((item) => getAuthor(item)).join("   ");
-  const handleShowCourse = () => {
-    onShowCourse({
-      id,
-      title,
-      description,
-      courseDate,
-      courseDuration,
-      courseAuthors,
-    });
-  };
 
   return (
     <div className="card">
@@ -54,7 +41,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
         <p>
           <strong>Created:</strong> {courseDate}
         </p>
-        <Button buttonText="show course" onClick={handleShowCourse} />
+        <CourseLink linkPath={`/courses/${id}`} linkText="show course" />
       </div>
     </div>
   );
