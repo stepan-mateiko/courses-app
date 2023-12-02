@@ -1,31 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 
-import { mockedCoursesList } from "../../constants.ts";
 import CourseCard from "./components/CourseCard/CourseCard.tsx";
 import EmptyCourseList from "../EmptyCourseList/EmptyCourseList.tsx";
 import CourseLink from "../../common/Link/Link.tsx";
+import { CourseType } from "../../store/courses/types.ts";
 
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  creationDate: string;
-  duration: number;
-  authors: string[];
+interface RootState {
+  courses: CourseType[];
 }
 
 const Courses: React.FC = () => {
-  const localStorageData = JSON.parse(localStorage.getItem("courses") || "[]");
+  const courses = useSelector((state: RootState) => state.courses);
 
-  const [list, setList] = useState<Course[]>([
-    ...new Set<Course>([...mockedCoursesList, ...localStorageData]),
-  ]);
-
-  useEffect(() => {
-    setList([...new Set<Course>([...mockedCoursesList, ...localStorageData])]);
-  }, []);
-
-  const hasCourses = mockedCoursesList.length !== 0;
+  const hasCourses = courses.length !== 0;
 
   return (
     <div className="courses">
@@ -33,7 +21,7 @@ const Courses: React.FC = () => {
         <CourseLink linkPath="/courses/add" linkText="Add new course" />
       )}
       {!hasCourses && <EmptyCourseList />}
-      {list.map((item) => (
+      {courses.map((item: CourseType) => (
         <CourseCard
           key={item.id}
           id={item.id}

@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import Logo from "./components/Logo/Logo.tsx";
 import Button from "../../common/Button/Button.tsx";
+import { UserActionTypes } from "../../store/user/types.ts";
+import { UserType } from "../../store/user/types.ts";
+
+interface RootState {
+  user: UserType;
+}
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState<string>("");
+  const dispatch = useDispatch();
   const [storedToken, setStoredToken] = useState<string>("");
+  const userName = useSelector((state: RootState) => state.user.name);
 
   useEffect(() => {
-    setUserName(localStorage.getItem("userName") || "");
     setStoredToken(localStorage.getItem("token") || "");
 
     if (!storedToken && window.location.pathname !== "/registration") {
@@ -18,9 +26,10 @@ const Header: React.FC = () => {
   }, [navigate, storedToken]);
 
   const logOut = () => {
-    localStorage.removeItem("userName");
+    dispatch({
+      type: UserActionTypes.LOGOUT,
+    });
     localStorage.removeItem("token");
-    setUserName("");
     setStoredToken("");
     navigate("/login");
   };

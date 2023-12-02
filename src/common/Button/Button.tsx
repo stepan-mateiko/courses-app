@@ -1,11 +1,15 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
-import { ButtonProps } from "./Button.types";
+interface ButtonProps {
+  buttonText: string;
+  onClick: () => void;
+  element?: ReactNode;
+}
 
-const Button: React.FC<ButtonProps> = ({ buttonText, onClick }) => {
+const Button: React.FC<ButtonProps> = ({ buttonText, onClick, element }) => {
   return (
     <button className="btn" onClick={onClick}>
-      {buttonText.toUpperCase()}
+      {!element ? buttonText.toUpperCase() : element}
     </button>
   );
 };

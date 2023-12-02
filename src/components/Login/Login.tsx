@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import Input from "../../common/Input/Input.tsx";
+import { UserActionTypes } from "../../store/user/types.ts";
+import { userAPI } from "../../store/services.ts";
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
   const [userEmail, setUserEmail] = useState<string>("");
   const [userPassword, setUserPassword] = useState<string>("");
   const navigate = useNavigate();
@@ -24,23 +27,24 @@ const Login: React.FC = () => {
 
   const handlePostRequest = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:4000/login",
+      const response = await userAPI.login(
         JSON.stringify({
           email: userEmail,
           password: userPassword,
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        })
       );
+      const loggedUser = {
+        name: response.data.user.name,
+        email: response.data.user.email,
+        token: response.data.result.slice(7),
+      };
 
-      const token = response.data.result.slice(7);
-      const userName = response.data.user.name;
-      localStorage.setItem("token", token);
-      localStorage.setItem("userName", userName);
+      localStorage.setItem("token", response.data.result.slice(7));
+
+      dispatch({
+        type: UserActionTypes.LOGIN_SUCCESS,
+        payload: loggedUser,
+      });
       navigate("/courses");
     } catch (error) {
       console.error("Error:", error.message);

@@ -1,19 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import Input from "../../common/Input/Input.tsx";
 import Button from "../../common/Button/Button.tsx";
 import CourseLink from "../../common/Link/Link.tsx";
-import { mockedAuthorsList } from "../../constants.ts";
 import { Delete } from "../Icon/Icon.tsx";
 import { getDuration } from "../../helpers/getCourseDuration.ts";
+import { AuthorsActionTypes } from "../../store/authors/types.ts";
+import { AuthorsType } from "../../store/authors/types.ts";
+import { CoursesActionTypes } from "../../store/courses/types.ts";
+import { authorsAPI } from "../../store/services.ts";
 
 interface Author {
   id: string;
   name: string;
 }
+// Define RootState type
+interface RootState {
+  authors: AuthorsType[];
+}
 
 const CreateCourse: React.FC = () => {
+  const dispatch = useDispatch();
+  const allAuthors = useSelector((state: RootState) => state.authors);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await authorsAPI.getAllAuthors();
+        dispatch({
+          type: AuthorsActionTypes.SAVE_AUTHORS,
+          payload: response.data.result,
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
+
   const [courseData, setCourseData] = useState({
     title: "",
     description: "",
@@ -21,13 +48,15 @@ const CreateCourse: React.FC = () => {
   });
 
   const [author, setAuthor] = useState<string>("");
-  const [courseAuthors, setCourseAuthors] = useState<Author[]>([]);
-  const [allAuthors, setAllAuthors] = useState<Author[]>(mockedAuthorsList);
+  const [courseAuthors, setCourseAuthors] = useState<AuthorsType[]>([]);
 
   const navigate = useNavigate();
 
   const handleInputChange = (field: string) => (newValue: string | number) => {
     setCourseData((prevData) => ({ ...prevData, [field]: newValue }));
+  };
+  const handleAuthorInput = () => (newValue: string) => {
+    setAuthor(newValue);
   };
 
   const handleCreateAuthor = () => {
@@ -38,7 +67,11 @@ const CreateCourse: React.FC = () => {
       name: author,
     };
 
-    setAllAuthors((prevAuthors) => [...prevAuthors, newAuthor]);
+    dispatch({
+      type: AuthorsActionTypes.ADD_AUTHOR,
+      payload: newAuthor,
+    });
+
     setAuthor("");
   };
 
@@ -47,9 +80,10 @@ const CreateCourse: React.FC = () => {
   };
 
   const handleDeleteAuthor = (author: Author) => {
-    setAllAuthors((prevAuthors) =>
-      prevAuthors.filter((item) => item.id !== author.id)
-    );
+    dispatch({
+      type: AuthorsActionTypes.DELETE_AUTHOR,
+      payload: author.id,
+    });
   };
 
   const handleDeleteCourseAuthor = (author: Author) => {
@@ -80,11 +114,10 @@ const CreateCourse: React.FC = () => {
       creationDate: formattedDate,
     };
 
-    const existingCourses = JSON.parse(localStorage.getItem("courses") || "[]");
-    const updatedCourses = [...existingCourses, newCourse];
-
-    localStorage.setItem("courses", JSON.stringify(updatedCourses));
-
+    dispatch({
+      type: CoursesActionTypes.ADD_COURSE,
+      payload: newCourse,
+    });
     resetForm();
     navigate("/courses");
   };
@@ -144,13 +177,12 @@ const CreateCourse: React.FC = () => {
           <div className="create__authors-all">
             <h3>Authors</h3>
             <div className="create__authors-input">
-              {" "}
               <Input
                 type="text"
                 label="Authors name"
                 placeholder="Input authors name"
                 value={author}
-                onChange={handleInputChange("author")}
+                onChange={handleAuthorInput()}
                 pattern="^[A-Z][a-z]+ [A-Z][a-z]+$"
                 title="Please enter your full name with both words starting with capital letters."
               />

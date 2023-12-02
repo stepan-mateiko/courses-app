@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-import { mockedCoursesList } from "../../constants.ts";
 import { getDuration } from "../../helpers/getCourseDuration.ts";
 import { getAuthor } from "../../helpers/getAuthors.ts";
 import CourseLink from "../../common/Link/Link.tsx";
+import { CourseType } from "../../store/courses/types.ts";
+
+// Define RootState type
+interface RootState {
+  courses: CourseType[];
+}
 
 interface Course {
   id: string;
@@ -17,13 +23,8 @@ interface Course {
 
 const CourseInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const localStorageData = JSON.parse(localStorage.getItem("courses") || "[]");
-  const [list, setList] = useState<Course[]>(mockedCoursesList);
 
-  useEffect(() => {
-    const uniqueCourses = new Set([...mockedCoursesList, ...localStorageData]);
-    setList([...uniqueCourses]);
-  }, []);
+  const list = useSelector((state: RootState) => state.courses);
 
   const course: Course | undefined = list.find((item) => item.id === id);
   if (!course) {
