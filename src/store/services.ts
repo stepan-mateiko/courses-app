@@ -26,5 +26,13 @@ export const coursesAPI = {
 };
 
 export const authorsAPI = {
-  getAllAuthors: () => axios.get(`${baseURL}/authors/all`),
+  getAllAuthors: async () => {
+    try {
+      const response = await axios.get(`${baseURL}/authors/all`);
+      return response.data.result;
+    } catch (error) {
+      console.error("Error fetching authors:", error.message);
+      throw error;
+    }
+  },
 };

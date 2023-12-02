@@ -9,7 +9,6 @@ const rootReducer = combineReducers({
   courses: coursesReducer,
   authors: authorsReducer,
   user: userReducer,
-  // Add other reducers as needed
 });
 
 export const store = configureStore({ reducer: rootReducer });

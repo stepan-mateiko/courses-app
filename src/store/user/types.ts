@@ -1,5 +1,3 @@
-// user/types.ts
-
 export const enum UserActionTypes {
   LOGIN_SUCCESS = "LOGIN_SUCCESS",
   LOGOUT = "LOGOUT",

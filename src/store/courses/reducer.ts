@@ -1,5 +1,3 @@
-// courses/reducer.ts
-
 import { CoursesActionTypes, CourseType, CoursesAction } from "./types.ts";
 import { coursesAPI } from "../services.ts";
 

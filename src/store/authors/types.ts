@@ -10,7 +10,6 @@ export const enum AuthorsActionTypes {
   ADD_AUTHOR = "ADD_AUTHOR",
   DELETE_AUTHOR = "DELETE_AUTHOR",
 }
-// Add action types for saving, updating, and deleting authors as needed
 
 export interface SaveAuthors {
   type: AuthorsActionTypes.SAVE_AUTHORS;

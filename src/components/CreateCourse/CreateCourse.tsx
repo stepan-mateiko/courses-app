@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,13 +10,12 @@ import { getDuration } from "../../helpers/getCourseDuration.ts";
 import { AuthorsActionTypes } from "../../store/authors/types.ts";
 import { AuthorsType } from "../../store/authors/types.ts";
 import { CoursesActionTypes } from "../../store/courses/types.ts";
-import { authorsAPI } from "../../store/services.ts";
 
 interface Author {
   id: string;
   name: string;
 }
-// Define RootState type
+
 interface RootState {
   authors: AuthorsType[];
 }
@@ -24,22 +23,6 @@ interface RootState {
 const CreateCourse: React.FC = () => {
   const dispatch = useDispatch();
   const allAuthors = useSelector((state: RootState) => state.authors);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await authorsAPI.getAllAuthors();
-        dispatch({
-          type: AuthorsActionTypes.SAVE_AUTHORS,
-          payload: response.data.result,
-        });
-      } catch (error) {
-        console.error("Error fetching data:", error.message);
-      }
-    };
-
-    fetchData();
-  }, [dispatch]);
 
   const [courseData, setCourseData] = useState({
     title: "",

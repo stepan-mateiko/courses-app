@@ -1,12 +1,10 @@
-// user/reducer.ts
-
 import { UserAction, UserActionTypes } from "./types.ts";
 
 export const userInitialState = {
   isAuth: false,
   name: "",
   email: "",
-  token: localStorage.getItem("token") || "", // Check if a token is already present in localStorage
+  token: localStorage.getItem("token") || "",
 };
 
 export function userReducer(state = userInitialState, action: UserAction) {

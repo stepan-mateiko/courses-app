@@ -1,5 +1,3 @@
-// authors/actions.ts
-
 import { AuthorsAction, AuthorsActionTypes, AuthorsType } from "./types.ts";
 
 export const authorsInitialState: AuthorsType[] = [];
