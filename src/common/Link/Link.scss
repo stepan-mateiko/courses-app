@@ -1,0 +1,14 @@
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.link {
+  background-color: $button-color;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  line-height: 1.2rem;
+  padding: 13px 36px;
+  border-radius: 5px;
+  text-decoration: none;
+  text-transform: uppercase;
+}

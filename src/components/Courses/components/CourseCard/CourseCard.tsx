@@ -1,9 +1,12 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 
-import Button from "../../../../common/Button/Button.tsx";
-import { CourseInfoProps } from "../../../CourseInfo/CourseInfo.tsx";
 import { getDuration } from "../../../../helpers/getCourseDuration.ts";
 import { getAuthor } from "../../../../helpers/getAuthors.ts";
+import CourseLink from "../../../../common/Link/Link.tsx";
+import Button from "../../../../common/Button/Button.tsx";
+import { Trash, Update } from "../../../Icon/Icon.tsx";
+import { CoursesActionTypes } from "../../../../store/courses/types.ts";
 
 interface CourseCardProps {
   id: string;
@@ -12,7 +15,6 @@ interface CourseCardProps {
   creationDate: string;
   duration: number;
   authors: string[];
-  onShowCourse: (courseProps: CourseInfoProps) => void;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({
@@ -22,19 +24,15 @@ const CourseCard: React.FC<CourseCardProps> = ({
   creationDate,
   duration,
   authors,
-  onShowCourse,
 }) => {
+  const dispatch = useDispatch();
   const courseDate: string = creationDate.split("/").join(".");
   const courseDuration: string = getDuration(duration);
   const courseAuthors = authors.map((item) => getAuthor(item)).join("   ");
-  const handleShowCourse = () => {
-    onShowCourse({
-      id,
-      title,
-      description,
-      courseDate,
-      courseDuration,
-      courseAuthors,
+  const deleteCourse = () => {
+    dispatch({
+      type: CoursesActionTypes.DELETE_COURSE,
+      payload: id,
     });
   };
 
@@ -54,7 +52,15 @@ const CourseCard: React.FC<CourseCardProps> = ({
         <p>
           <strong>Created:</strong> {courseDate}
         </p>
-        <Button buttonText="show course" onClick={handleShowCourse} />
+        <div className="card__btns">
+          <CourseLink linkPath={`/courses/${id}`} linkText="show course" />
+          <Button buttonText="" onClick={deleteCourse} element={<Trash />} />
+          <Button
+            buttonText=""
+            onClick={() => alert("Updated")}
+            element={<Update />}
+          />
+        </div>
       </div>
     </div>
   );
