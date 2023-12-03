@@ -1,8 +1,6 @@
 import { AuthorsAction, AuthorsActionTypes, AuthorsType } from "./types.ts";
-import { authorsAPI } from "../services.ts";
 
-export const authorsInitialState: AuthorsType[] =
-  await authorsAPI.getAllAuthors();
+export const authorsInitialState: AuthorsType[] = [];
 
 export function authorsReducer(
   state = authorsInitialState,

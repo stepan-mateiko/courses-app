@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { getDuration } from "../../../../helpers/getCourseDuration.ts";
 import { getAuthor } from "../../../../helpers/getAuthors.ts";
@@ -7,6 +7,8 @@ import CourseLink from "../../../../common/Link/Link.tsx";
 import Button from "../../../../common/Button/Button.tsx";
 import { Trash, Update } from "../../../Icon/Icon.tsx";
 import { CoursesActionTypes } from "../../../../store/courses/types.ts";
+import { RootState } from "../../../../store/index.ts";
+import { deleteCourse } from "../../../../store/courses/thunk.ts";
 
 interface CourseCardProps {
   id: string;
@@ -26,14 +28,12 @@ const CourseCard: React.FC<CourseCardProps> = ({
   authors,
 }) => {
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
   const courseDate: string = creationDate.split("/").join(".");
   const courseDuration: string = getDuration(duration);
   const courseAuthors = authors.map((item) => getAuthor(item)).join("   ");
-  const deleteCourse = () => {
-    dispatch({
-      type: CoursesActionTypes.DELETE_COURSE,
-      payload: id,
-    });
+  const handleDeleteCourse = () => {
+    dispatch(deleteCourse(user.token, id));
   };
 
   return (
@@ -54,12 +54,20 @@ const CourseCard: React.FC<CourseCardProps> = ({
         </p>
         <div className="card__btns">
           <CourseLink linkPath={`/courses/${id}`} linkText="show course" />
-          <Button buttonText="" onClick={deleteCourse} element={<Trash />} />
-          <Button
-            buttonText=""
-            onClick={() => alert("Updated")}
-            element={<Update />}
-          />
+          {user.role === "admin" && (
+            <Button
+              buttonText=""
+              onClick={handleDeleteCourse}
+              element={<Trash />}
+            />
+          )}
+          {user.role === "admin" && (
+            <Button
+              buttonText=""
+              onClick={() => alert("Updated")}
+              element={<Update />}
+            />
+          )}
         </div>
       </div>
     </div>

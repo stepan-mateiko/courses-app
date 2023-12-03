@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,6 +10,7 @@ import { getDuration } from "../../helpers/getCourseDuration.ts";
 import { AuthorsActionTypes } from "../../store/authors/types.ts";
 import { AuthorsType } from "../../store/authors/types.ts";
 import { CoursesActionTypes } from "../../store/courses/types.ts";
+import { getAuthors } from "../../store/authors/thunk.ts";
 
 interface Author {
   id: string;
@@ -22,6 +23,10 @@ interface RootState {
 
 const CreateCourse: React.FC = () => {
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAuthors());
+  }, [dispatch]);
+
   const allAuthors = useSelector((state: RootState) => state.authors);
 
   const [courseData, setCourseData] = useState({

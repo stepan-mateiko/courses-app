@@ -1,7 +1,6 @@
 import { CoursesActionTypes, CourseType, CoursesAction } from "./types.ts";
-import { coursesAPI } from "../services.ts";
 
-const initCoursesState: CourseType[] = await coursesAPI.getAllCourses();
+const initCoursesState: CourseType[] = [];
 
 export function coursesReducer(
   state = initCoursesState,

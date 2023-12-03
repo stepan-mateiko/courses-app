@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Logo from "./components/Logo/Logo.tsx";
 import Button from "../../common/Button/Button.tsx";
-import { UserActionTypes } from "../../store/user/types.ts";
 import { UserType } from "../../store/user/types.ts";
+import { logOut } from "../../store/user/thunk.ts";
 
 interface RootState {
   user: UserType;
@@ -25,12 +25,9 @@ const Header: React.FC = () => {
     }
   }, [navigate, storedToken]);
 
-  const logOut = () => {
-    dispatch({
-      type: UserActionTypes.LOGOUT,
-    });
-    localStorage.removeItem("token");
+  const handleLogOut = () => {
     setStoredToken("");
+    dispatch(logOut(storedToken));
     navigate("/login");
   };
 
@@ -39,7 +36,7 @@ const Header: React.FC = () => {
       <Logo />
       <div className="header__btn">
         <p>{userName}</p>
-        {storedToken && <Button buttonText="logout" onClick={logOut} />}
+        {storedToken && <Button buttonText="logout" onClick={handleLogOut} />}
       </div>
     </header>
   );

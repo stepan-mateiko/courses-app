@@ -36,10 +36,10 @@ const Login: React.FC = () => {
       const loggedUser = {
         name: response.data.user.name,
         email: response.data.user.email,
-        token: response.data.result.slice(7),
+        token: response.data.result,
       };
 
-      localStorage.setItem("token", response.data.result.slice(7));
+      localStorage.setItem("token", response.data.result);
 
       dispatch({
         type: UserActionTypes.LOGIN_SUCCESS,
@@ -75,8 +75,6 @@ const Login: React.FC = () => {
           placeholder="Input password"
           value={userPassword}
           onChange={handleInputChange(setUserPassword)}
-          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$"
-          title="Password must contain at least one lowercase letter, one uppercase letter, one digit, and be at least 8 characters long."
         />
 
         <button type="submit" className="btn login__btn">

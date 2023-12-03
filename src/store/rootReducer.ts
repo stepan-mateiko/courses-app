@@ -1,6 +1,4 @@
-// rootReducer.ts
-
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { combineReducers } from "@reduxjs/toolkit";
 import { coursesReducer } from "./courses/reducer.ts";
 import { authorsReducer } from "./authors/reducer.ts";
 import { userReducer } from "./user/reduser.ts";
@@ -11,4 +9,4 @@ const rootReducer = combineReducers({
   user: userReducer,
 });
 
-export const store = configureStore({ reducer: rootReducer });
+export default rootReducer;

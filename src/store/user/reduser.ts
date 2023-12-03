@@ -5,6 +5,7 @@ export const userInitialState = {
   name: "",
   email: "",
   token: localStorage.getItem("token") || "",
+  role: "",
 };
 
 export function userReducer(state = userInitialState, action: UserAction) {
@@ -24,6 +25,14 @@ export function userReducer(state = userInitialState, action: UserAction) {
         name: "",
         email: "",
         token: "",
+      };
+    case UserActionTypes.GET_USER_INFO:
+      return {
+        ...state,
+        isAuth: true,
+        name: action.payload.name,
+        email: action.payload.email,
+        role: action.payload.role,
       };
     default:
       return state;
