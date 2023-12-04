@@ -1,5 +1,5 @@
 import { AppThunk } from "../index.ts";
-import { CoursesActionTypes } from "./types.ts";
+import { CourseType, CoursesActionTypes } from "./types.ts";
 import { coursesAPI } from "../services.ts";
 
 export const getCourses = (): AppThunk => {
@@ -28,6 +28,44 @@ export const deleteCourse = (token: string, id: string): AppThunk => {
       });
     } catch (error) {
       console.error("Error deleting course:", error.message);
+    }
+  };
+};
+
+export const addCourse = (token: string, courseData: CourseType): AppThunk => {
+  return async (dispatch): Promise<void> => {
+    try {
+      await coursesAPI.addCourseToServer(token, courseData);
+
+      dispatch({
+        type: CoursesActionTypes.ADD_COURSE,
+        payload: courseData,
+      });
+    } catch (error) {
+      console.error("Error adding course:", error.message);
+    }
+  };
+};
+
+export const updateCourse = (
+  token: string,
+  id: string,
+  courseData: CourseType
+): AppThunk => {
+  return async (dispatch): Promise<void> => {
+    try {
+      const response = await coursesAPI.updateCourseOnServer(
+        token,
+        id,
+        courseData
+      );
+
+      dispatch({
+        type: CoursesActionTypes.UPDATE_COURSE,
+        payload: response,
+      });
+    } catch (error) {
+      console.error("Error adding course:", error.message);
     }
   };
 };

@@ -9,6 +9,7 @@ import { CourseType } from "../../store/courses/types.ts";
 import { getCourses } from "../../store/courses/thunk.ts";
 import { getUserInfo } from "../../store/user/thunk.ts";
 import { RootState } from "../../store/index.ts";
+import { getAuthors } from "../../store/authors/thunk.ts";
 
 const Courses: React.FC = () => {
   const courses = useSelector((state: RootState) => state.courses);
@@ -22,6 +23,7 @@ const Courses: React.FC = () => {
       dispatch(getUserInfo(isAuth));
     }
     dispatch(getCourses());
+    dispatch(getAuthors());
   }, [dispatch]);
 
   return (

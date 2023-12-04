@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import Input from "../../common/Input/Input.tsx";
@@ -9,25 +9,25 @@ import { Delete } from "../Icon/Icon.tsx";
 import { getDuration } from "../../helpers/getCourseDuration.ts";
 import { AuthorsActionTypes } from "../../store/authors/types.ts";
 import { AuthorsType } from "../../store/authors/types.ts";
-import { CoursesActionTypes } from "../../store/courses/types.ts";
 import { getAuthors } from "../../store/authors/thunk.ts";
+import { addCourse, updateCourse } from "../../store/courses/thunk.ts";
+import { addAuthor } from "../../store/authors/thunk.ts";
+import { RootState } from "../../store/index.ts";
 
 interface Author {
-  id: string;
+  id?: string;
   name: string;
-}
-
-interface RootState {
-  authors: AuthorsType[];
 }
 
 const CreateCourse: React.FC = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getAuthors());
-  }, [dispatch]);
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
 
   const allAuthors = useSelector((state: RootState) => state.authors);
+  const updatedCourse = useSelector((state: RootState) => state.courses).filter(
+    (item) => item.id === id
+  )[0];
 
   const [courseData, setCourseData] = useState({
     title: "",
@@ -38,8 +38,6 @@ const CreateCourse: React.FC = () => {
   const [author, setAuthor] = useState<string>("");
   const [courseAuthors, setCourseAuthors] = useState<AuthorsType[]>([]);
 
-  const navigate = useNavigate();
-
   const handleInputChange = (field: string) => (newValue: string | number) => {
     setCourseData((prevData) => ({ ...prevData, [field]: newValue }));
   };
@@ -47,18 +45,31 @@ const CreateCourse: React.FC = () => {
     setAuthor(newValue);
   };
 
+  useEffect(() => {
+    if (updatedCourse) {
+      setCourseData({
+        title: updatedCourse.title,
+        description: updatedCourse.description,
+        duration: updatedCourse.duration,
+      });
+      setCourseAuthors(
+        updatedCourse.authors.map((id) => {
+          return allAuthors.find((obj) => obj.id === id);
+        })
+      );
+    }
+  }, [updatedCourse]);
+
   const handleCreateAuthor = () => {
-    const { v4: uuidv4 } = require("uuid");
-    const newAuthorId = uuidv4();
+    // const { v4: uuidv4 } = require("uuid");
+    // const newAuthorId = uuidv4();
     const newAuthor: Author = {
-      id: newAuthorId,
+      // id: newAuthorId,
       name: author,
     };
-
-    dispatch({
-      type: AuthorsActionTypes.ADD_AUTHOR,
-      payload: newAuthor,
-    });
+    const token = localStorage.getItem("token");
+    console.log(newAuthor);
+    dispatch(addAuthor(token, newAuthor));
 
     setAuthor("");
   };
@@ -86,26 +97,41 @@ const CreateCourse: React.FC = () => {
       return;
     }
 
-    const { v4: uuidv4 } = require("uuid");
-    const courseId = uuidv4();
-    const today = new Date();
-    const formattedDate = `${today.getDate()}/${
-      today.getMonth() + 1
-    }/${today.getFullYear()}`;
+    // const { v4: uuidv4 } = require("uuid");
+    // const courseId = uuidv4();
+    // const today = new Date();
+    // const formattedDate = `${today.getDate()}/${
+    //   today.getMonth() + 1
+    // }/${today.getFullYear()}`;
 
     const newCourse = {
-      id: courseId,
+      // id: courseId,
       title: courseData.title,
       description: courseData.description,
-      duration: courseData.duration,
+      duration: +courseData.duration,
       authors: courseAuthors.map((item) => item.id),
-      creationDate: formattedDate,
+      // creationDate: formattedDate,
     };
+    const token = localStorage.getItem("token");
+    dispatch(addCourse(token, newCourse));
+    resetForm();
+    navigate("/courses");
+  };
 
-    dispatch({
-      type: CoursesActionTypes.ADD_COURSE,
-      payload: newCourse,
-    });
+  const handleUpdateCourse = () => {
+    if (!isValidCourseData()) {
+      alert("Please fill in all required fields and add at least one author.");
+      return;
+    }
+
+    const newCourse = {
+      title: courseData.title,
+      description: courseData.description,
+      duration: +courseData.duration,
+      authors: courseAuthors.map((item) => item.id),
+    };
+    const token = localStorage.getItem("token");
+    dispatch(updateCourse(token, updatedCourse.id, newCourse));
     resetForm();
     navigate("/courses");
   };
@@ -217,10 +243,18 @@ const CreateCourse: React.FC = () => {
       </form>
       <div className="create__btns">
         <CourseLink linkPath="/courses" linkText="cancel" />
-        <Button
-          buttonText="create course"
-          onClick={() => handleCreateCourse()}
-        />
+        {!updatedCourse && (
+          <Button
+            buttonText="create course"
+            onClick={() => handleCreateCourse()}
+          />
+        )}
+        {updatedCourse && (
+          <Button
+            buttonText="update course"
+            onClick={() => handleUpdateCourse()}
+          />
+        )}
       </div>
     </div>
   );

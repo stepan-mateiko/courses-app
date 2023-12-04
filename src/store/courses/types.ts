@@ -1,8 +1,8 @@
 export type CourseType = {
-  id: string;
+  id?: string;
   title: string;
   description: string;
-  creationDate: string;
+  creationDate?: string;
   duration: number;
   authors: string[];
 };
@@ -11,6 +11,7 @@ export const enum CoursesActionTypes {
   SAVE_COURSES = "SAVE_COURSES",
   ADD_COURSE = "ADD_COURSE",
   DELETE_COURSE = "DELETE_COURSE",
+  UPDATE_COURSE = "UPDATE_COURSE",
 }
 
 export interface SaveCourses {
@@ -27,5 +28,13 @@ export interface DeleteCourse {
   type: CoursesActionTypes.DELETE_COURSE;
   payload: string;
 }
+export interface UpdateCourse {
+  type: CoursesActionTypes.UPDATE_COURSE;
+  payload: string;
+}
 
-export type CoursesAction = SaveCourses | AddCourse | DeleteCourse;
+export type CoursesAction =
+  | SaveCourses
+  | AddCourse
+  | DeleteCourse
+  | UpdateCourse;

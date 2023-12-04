@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { getDuration } from "../../helpers/getCourseDuration.ts";
 import { getAuthor } from "../../helpers/getAuthors.ts";
 import CourseLink from "../../common/Link/Link.tsx";
-import { CourseType } from "../../store/courses/types.ts";
 
-// Define RootState type
-interface RootState {
-  courses: CourseType[];
-}
+import { RootState } from "../../store/index.ts";
 
 interface Course {
   id: string;
@@ -25,6 +21,7 @@ const CourseInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const list = useSelector((state: RootState) => state.courses);
+  const allAuthors = useSelector((state: RootState) => state.authors);
 
   const course: Course | undefined = list.find((item) => item.id === id);
   if (!course) {
@@ -34,7 +31,11 @@ const CourseInfo: React.FC = () => {
   const { title, description, creationDate, duration, authors } = course;
   const courseDate: string = creationDate.split("/").join(".");
   const courseDuration: string = getDuration(duration);
-  const courseAuthors = authors.map((item) => getAuthor(item)).join("   ");
+  const courseAuthors = authors
+    .map((id) => {
+      return allAuthors.find((obj) => obj.id === id)?.name;
+    })
+    .join(" ");
 
   return (
     <div className="course-info">

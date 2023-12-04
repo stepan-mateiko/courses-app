@@ -2,7 +2,7 @@
 
 export type AuthorsType = {
   name: string;
-  id: string;
+  id?: string;
 };
 
 export const enum AuthorsActionTypes {

@@ -2,11 +2,9 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getDuration } from "../../../../helpers/getCourseDuration.ts";
-import { getAuthor } from "../../../../helpers/getAuthors.ts";
 import CourseLink from "../../../../common/Link/Link.tsx";
 import Button from "../../../../common/Button/Button.tsx";
 import { Trash, Update } from "../../../Icon/Icon.tsx";
-import { CoursesActionTypes } from "../../../../store/courses/types.ts";
 import { RootState } from "../../../../store/index.ts";
 import { deleteCourse } from "../../../../store/courses/thunk.ts";
 
@@ -29,9 +27,17 @@ const CourseCard: React.FC<CourseCardProps> = ({
 }) => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
-  const courseDate: string = creationDate.split("/").join(".");
+  const allAuthors = useSelector((state: RootState) => state.authors);
+  const courseDate: string = creationDate
+    ? creationDate.split("/").join(".")
+    : "";
   const courseDuration: string = getDuration(duration);
-  const courseAuthors = authors.map((item) => getAuthor(item)).join("   ");
+  const courseAuthors = authors
+    .map((id) => {
+      return allAuthors.find((obj) => obj.id === id)?.name;
+    })
+    .join(" ");
+
   const handleDeleteCourse = () => {
     dispatch(deleteCourse(user.token, id));
   };
@@ -62,9 +68,9 @@ const CourseCard: React.FC<CourseCardProps> = ({
             />
           )}
           {user.role === "admin" && (
-            <Button
-              buttonText=""
-              onClick={() => alert("Updated")}
+            <CourseLink
+              linkPath={`/courses/update/${id}`}
+              linkText=""
               element={<Update />}
             />
           )}

@@ -24,7 +24,7 @@ const App: React.FC = () => {
           <Route path="*" element={<Navigate to="/login" />} />
           <Route path="/courses" element={<PrivateRoute />}>
             <Route path="add" element={<CourseForm />} />
-            <Route path="update/:courseId" element={<CourseForm />} />
+            <Route path="update/:id" element={<CourseForm />} />
           </Route>
         </Routes>
       </BrowserRouter>
