@@ -20,10 +20,11 @@ const Courses: React.FC = () => {
   useEffect(() => {
     const isAuth = localStorage.getItem("token");
     if (isAuth) {
-      dispatch(getUserInfo(isAuth));
+      dispatch(getUserInfo(isAuth) as any);
     }
-    dispatch(getCourses());
-    dispatch(getAuthors());
+    dispatch(getCourses() as any);
+
+    dispatch(getAuthors() as any);
   }, [dispatch]);
 
   return (

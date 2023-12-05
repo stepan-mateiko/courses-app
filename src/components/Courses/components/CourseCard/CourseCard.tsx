@@ -33,13 +33,15 @@ const CourseCard: React.FC<CourseCardProps> = ({
     : "";
   const courseDuration: string = getDuration(duration);
   const courseAuthors = authors
-    .map((id) => {
-      return allAuthors.find((obj) => obj.id === id)?.name;
-    })
-    .join(" ");
+    ? authors
+        .map((id) => {
+          return allAuthors.find((obj) => obj.id === id)?.name;
+        })
+        .join(" ")
+    : [];
 
   const handleDeleteCourse = () => {
-    dispatch(deleteCourse(user.token, id));
+    dispatch(deleteCourse(user.token, id) as any);
   };
 
   return (

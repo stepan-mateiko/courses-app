@@ -27,7 +27,7 @@ const Header: React.FC = () => {
 
   const handleLogOut = () => {
     setStoredToken("");
-    dispatch(logOut(storedToken));
+    dispatch(logOut(storedToken) as any);
     navigate("/login");
   };
 

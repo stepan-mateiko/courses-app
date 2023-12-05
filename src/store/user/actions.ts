@@ -2,7 +2,7 @@ import { UserActionTypes, UserType } from "./types.ts";
 import { userAPI } from "../services.ts";
 
 export const loginSuccess = (userData: UserType) => ({
-  type: UserActionTypes.LOGIN_SUCCESS,
+  type: UserActionTypes.LOGIN,
   payload: userData,
 });
 

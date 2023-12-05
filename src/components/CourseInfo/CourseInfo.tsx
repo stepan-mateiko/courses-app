@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { getDuration } from "../../helpers/getCourseDuration.ts";
-import { getAuthor } from "../../helpers/getAuthors.ts";
 import CourseLink from "../../common/Link/Link.tsx";
 
 import { RootState } from "../../store/index.ts";

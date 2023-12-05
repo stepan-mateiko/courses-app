@@ -27,12 +27,10 @@ const Login: React.FC = () => {
 
   const handlePostRequest = async () => {
     try {
-      const response = await userAPI.login(
-        JSON.stringify({
-          email: userEmail,
-          password: userPassword,
-        })
-      );
+      const response = await userAPI.login({
+        email: userEmail,
+        password: userPassword,
+      });
       const loggedUser = {
         name: response.data.user.name,
         email: response.data.user.email,
@@ -42,7 +40,7 @@ const Login: React.FC = () => {
       localStorage.setItem("token", response.data.result);
 
       dispatch({
-        type: UserActionTypes.LOGIN_SUCCESS,
+        type: UserActionTypes.LOGIN,
         payload: loggedUser,
       });
       navigate("/courses");

@@ -2,32 +2,52 @@
 
 import axios from "axios";
 
+import { UserType } from "./user/types.ts";
 import { CourseType } from "./courses/types.ts";
 import { AuthorsType } from "./authors/types.ts";
 
 const baseURL = "http://localhost:4000";
 
 export const userAPI = {
-  login: (credentials) =>
-    axios.post(`${baseURL}/login`, credentials, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }),
-  getUser: (token: string) =>
-    axios.get(`${baseURL}/users/me`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    }),
-  logOut: (token: string) =>
-    axios.delete(`${baseURL}/logout`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    }),
+  login: async (credentials: UserType) => {
+    try {
+      return axios.post(`${baseURL}/login`, credentials, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.error("Login error:", error.message);
+      throw error;
+    }
+  },
+
+  getUser: async (token: string) => {
+    try {
+      return axios.get(`${baseURL}/users/me`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+    } catch (error) {
+      console.error("Error getting user info:", error.message);
+      throw error;
+    }
+  },
+  logOut: async (token: string) => {
+    try {
+      return axios.delete(`${baseURL}/logout`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+    } catch (error) {
+      console.error("Logout error:", error.message);
+      throw error;
+    }
+  },
 };
 
 export const coursesAPI = {
@@ -42,7 +62,7 @@ export const coursesAPI = {
   },
   deleteCourseFromServer: async (token: string, id: string) => {
     try {
-      axios.delete(`${baseURL}/courses/${id}`, {
+      return axios.delete(`${baseURL}/courses/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
@@ -55,7 +75,7 @@ export const coursesAPI = {
   },
   addCourseToServer: async (token: string, courseData: CourseType) => {
     try {
-      axios.post(`${baseURL}/courses/add`, courseData, {
+      return axios.post(`${baseURL}/courses/add`, courseData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
@@ -72,7 +92,7 @@ export const coursesAPI = {
     courseData: CourseType
   ) => {
     try {
-      axios.put(`${baseURL}/courses/${id}`, courseData, {
+      return axios.put(`${baseURL}/courses/${id}`, courseData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: token,

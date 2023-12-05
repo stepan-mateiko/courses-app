@@ -9,7 +9,6 @@ import { Delete } from "../Icon/Icon.tsx";
 import { getDuration } from "../../helpers/getCourseDuration.ts";
 import { AuthorsActionTypes } from "../../store/authors/types.ts";
 import { AuthorsType } from "../../store/authors/types.ts";
-import { getAuthors } from "../../store/authors/thunk.ts";
 import { addCourse, updateCourse } from "../../store/courses/thunk.ts";
 import { addAuthor } from "../../store/authors/thunk.ts";
 import { RootState } from "../../store/index.ts";
@@ -69,7 +68,7 @@ const CreateCourse: React.FC = () => {
     };
     const token = localStorage.getItem("token");
     console.log(newAuthor);
-    dispatch(addAuthor(token, newAuthor));
+    dispatch(addAuthor(token, newAuthor) as any);
 
     setAuthor("");
   };
@@ -113,7 +112,7 @@ const CreateCourse: React.FC = () => {
       // creationDate: formattedDate,
     };
     const token = localStorage.getItem("token");
-    dispatch(addCourse(token, newCourse));
+    dispatch(addCourse(token, newCourse) as any);
     resetForm();
     navigate("/courses");
   };
@@ -131,7 +130,7 @@ const CreateCourse: React.FC = () => {
       authors: courseAuthors.map((item) => item.id),
     };
     const token = localStorage.getItem("token");
-    dispatch(updateCourse(token, updatedCourse.id, newCourse));
+    dispatch(updateCourse(token, updatedCourse.id, newCourse) as any);
     resetForm();
     navigate("/courses");
   };

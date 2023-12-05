@@ -10,7 +10,7 @@ export const userInitialState = {
 
 export function userReducer(state = userInitialState, action: UserAction) {
   switch (action.type) {
-    case UserActionTypes.LOGIN_SUCCESS:
+    case UserActionTypes.LOGIN:
       return {
         ...state,
         isAuth: true,

@@ -1,11 +1,11 @@
 export const enum UserActionTypes {
-  LOGIN_SUCCESS = "LOGIN_SUCCESS",
+  LOGIN = "LOGIN",
   LOGOUT = "LOGOUT",
   GET_USER_INFO = "GET_USER_INFO",
 }
 
 interface LoginSuccess {
-  type: UserActionTypes.LOGIN_SUCCESS;
+  type: UserActionTypes.LOGIN;
   payload: {
     name: string;
     email: string;

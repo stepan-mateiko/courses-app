@@ -1,6 +1,26 @@
 import { AppThunk } from "../index.ts";
-import { UserActionTypes } from "./types.ts";
+import { UserActionTypes, UserType } from "./types.ts";
 import { userAPI } from "../services.ts";
+
+export const loginUser = (credentials: UserType): AppThunk => {
+  return async (dispatch) => {
+    try {
+      const response = await userAPI.login(credentials);
+
+      localStorage.setItem("token", response.data.result);
+      if (localStorage.getItem("token")) {
+        const loggedUser = {
+          name: response.data.user.name,
+          email: response.data.user.email,
+          token: response.data.result,
+        };
+        dispatch({ type: UserActionTypes.LOGIN, payload: loggedUser });
+      }
+    } catch (error) {
+      console.error("Error logging in:", error.message);
+    }
+  };
+};
 
 export const getUserInfo = (token: string): AppThunk => {
   return async (dispatch): Promise<void> => {
