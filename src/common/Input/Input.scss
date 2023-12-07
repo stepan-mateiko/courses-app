@@ -1,0 +1,30 @@
+@import "../../styles/mixins";
+@import "../../styles/variables";
+
+.input-block {
+  width: 45%;
+  @include flex-type();
+  flex-direction: column;
+  position: relative;
+  label {
+    align-self: flex-start;
+    font-weight: 700;
+  }
+  input {
+    border-radius: 5px;
+    padding: 5%;
+    border: 1px solid $registration-border-color;
+  }
+  input:invalid {
+    border: 1px solid $registration-error-color;
+  }
+  input:invalid + .error-message::after {
+    content: "Is required";
+    left: 0;
+    position: absolute;
+    display: block;
+    color: $registration-error-color;
+    font-size: 0.8em;
+    margin-top: 4px;
+  }
+}
